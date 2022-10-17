@@ -17,6 +17,7 @@ object JobOverlapHelper {
     //lets first find the groups by ExecID
     val jobGroupListByExecID = ac.jobSQLExecIdMap.groupBy(x => x._2).map(x => x._2.map(x => ac.jobMap(x._1)).toList).toList
 
+    println("Job By Group Id :" + jobGroupListByExecID)
     val allJobIDs = ac.jobMap.map(x => x._1).toSet
     val groupJobIDs = jobGroupListByExecID.flatMap(x => x.map(x => x.jobID)).toSet
     //these jobs are not part of any ExecID

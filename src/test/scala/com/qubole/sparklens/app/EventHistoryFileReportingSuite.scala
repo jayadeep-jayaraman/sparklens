@@ -3,9 +3,9 @@ package com.qubole.sparklens.app
 import java.io.{ByteArrayOutputStream, PrintStream}
 
 import com.qubole.sparklens.TestUtils
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class EventHistoryFileReportingSuite extends FunSuite {
+class EventHistoryFileReportingSuite extends AnyFunSuite {
 
   test("Reporting from sparklens and event-history should be same") {
     val eventHistoryFile = s"${System.getProperty("user.dir")}" +

@@ -187,6 +187,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
         } else {
           EmailReportHelper.generateReport(appContext.toString(), sparkConf)
         }
+        print ("Analyzer Start")
         AppAnalyzer.startAnalyzers(appContext)
       }
     }

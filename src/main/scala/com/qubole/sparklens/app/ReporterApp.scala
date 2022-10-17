@@ -28,6 +28,10 @@ object ReporterApp extends App {
   parseInput()
 
   private def checkArgs(): Unit = {
+
+    println("Arguements: " + args)
+    println("First Arguement: " + args(0))
+    println("Second Arguement:" + args(1))
     args.size match {
       case x if x < 1 => throw new IllegalArgumentException(usage)
       case _ => // Do nothing

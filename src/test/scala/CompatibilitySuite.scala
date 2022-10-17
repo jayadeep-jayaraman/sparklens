@@ -2,11 +2,11 @@ import java.io.{ByteArrayOutputStream, FileNotFoundException, PrintStream}
 
 import com.qubole.sparklens.TestUtils
 import com.qubole.sparklens.app.ReporterApp
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.control.Breaks._
 
-class CompatibilitySuite extends FunSuite {
+class CompatibilitySuite extends AnyFunSuite {
 
   test("should be able to report on previously generated sparklens dumps") {
 
