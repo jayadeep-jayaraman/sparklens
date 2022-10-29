@@ -74,13 +74,8 @@ class EventHistoryReporter(file: String, extraConf: List[(String, String)] = Lis
 
   private def getFilter(eventString: String): Boolean = {
     implicit val formats = DefaultFormats
-    println("Filtered Events :" + eventFilter.contains(Json4sWrapper.parse(eventString).extract[Map[String, Any]].get("Event")
-      .get.asInstanceOf[String]))
-
     eventFilter.contains(Json4sWrapper.parse(eventString).extract[Map[String, Any]].get("Event")
       .get.asInstanceOf[String])
-
-
   }
 
   private def eventFilter: Set[String] = {
