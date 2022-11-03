@@ -266,7 +266,8 @@ class PQParallelStageSchedulerSuite extends AnyFunSuite {
             jobMap,
             jobSQLExecIDMap,
             mutable.HashMap[Int, StageTimeSpan](),
-            mutable.HashMap[Int, Long]())
+            mutable.HashMap[Int, Long](),
+            "")
 
         val time = CompletionEstimator.estimateAppWallClockTimeWithJobLists(ac, 1, 1, 3)
         assert(time === 3, s"Test failed")

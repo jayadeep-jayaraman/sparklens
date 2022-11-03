@@ -144,7 +144,8 @@ object ReporterApp extends App {
       "SparkListenerJobStart",
       "SparkListenerJobEnd",
       "SparkListenerStageSubmitted",
-      "SparkListenerStageCompleted"
+      "SparkListenerStageCompleted",
+      "org.apache.spark.sql.execution.ui.SparkListenerSQLExecutionStart"
     )
   }
 

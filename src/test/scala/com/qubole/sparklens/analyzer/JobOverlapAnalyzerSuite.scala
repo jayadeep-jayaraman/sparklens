@@ -66,7 +66,8 @@ class JobOverlapAnalyzerSuite extends AnyFunSuite {
       jobMap,
       jobSQLExecIDMap,
       mutable.HashMap[Int, StageTimeSpan](),
-      mutable.HashMap[Int, Long]())
+      mutable.HashMap[Int, Long](),
+      "")
   }
 
   test("JobOverlapAnalyzerTest: Jobs running in parallel should be considered while computing " +

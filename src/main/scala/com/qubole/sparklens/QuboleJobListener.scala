@@ -26,7 +26,7 @@ import com.qubole.sparklens.timespan.{ExecutorTimeSpan, HostTimeSpan, JobTimeSpa
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
-
+import org.apache.spark.sql.execution.ui.SparkListenerSQLExecutionStart
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -48,6 +48,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
   protected val stageIDToJobID   = new mutable.HashMap[Int, Long]
   protected val failedStages     = new ListBuffer[String]
   protected val appMetrics       = new AggregateMetrics()
+  protected var physicalPlan     = ""
 
   private def hostCount():Int = hostMap.size
 
@@ -174,7 +175,8 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
       jobMap,
       jobSQLExecIDMap,
       stageMap,
-      stageIDToJobID)
+      stageIDToJobID,
+      physicalPlan)
 
     asyncReportingEnabled(sparkConf) match {
       case true => {
@@ -267,6 +269,15 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
       val jobTimeSpan = jobMap(jobID)
       jobTimeSpan.addStage(stageTimeSpan)
       stageTimeSpan.finalUpdate()
+    }
+  }
+
+  override def onOtherEvent(event: SparkListenerEvent): Unit = {
+    if (event.isInstanceOf[SparkListenerSQLExecutionStart]) {
+      val sparkListenerSQLExecutionStart = event.asInstanceOf[SparkListenerSQLExecutionStart]
+      if(sparkListenerSQLExecutionStart.description contains "collect at SqlExecutor.scala:") {
+        physicalPlan += sparkListenerSQLExecutionStart.physicalPlanDescription
+      }
     }
   }
 }

@@ -31,7 +31,8 @@ case class AppContext(appInfo:        ApplicationInfo,
                       jobMap:         mutable.HashMap[Long, JobTimeSpan],
                       jobSQLExecIdMap:mutable.HashMap[Long, Long],
                       stageMap:       mutable.HashMap[Int, StageTimeSpan],
-                      stageIDToJobID: mutable.HashMap[Int, Long]) {
+                      stageIDToJobID: mutable.HashMap[Int, Long],
+                      physicalPlan:   String) {
 
   def filterByStartAndEndTime(startTime: Long, endTime: Long): AppContext = {
     new AppContext(appInfo,
@@ -48,7 +49,8 @@ case class AppContext(appInfo:        ApplicationInfo,
       stageMap
         .filter(x => x._2.startTime >= startTime &&
                      x._2.endTime <= endTime),
-      stageIDToJobID)
+      stageIDToJobID,
+      physicalPlan)
   }
 
   override def toString(): String = {
@@ -61,7 +63,8 @@ case class AppContext(appInfo:        ApplicationInfo,
       "jobMap" -> AppContext.getMap(jobMap),
       "jobSQLExecIdMap" -> jobSQLExecIdMap,
       "stageMap" -> AppContext.getMap(stageMap),
-      "stageIDToJobID" -> stageIDToJobID
+      "stageIDToJobID" -> stageIDToJobID,
+      "physicalPlan" -> physicalPlan
     )
     Serialization.writePretty(map)
   }
@@ -134,7 +137,8 @@ object AppContext {
       JobTimeSpan.getTimeSpan((json \ "jobMap").extract[Map[String, JValue]]),
       getJobSQLExecIdMap(json, new mutable.HashMap[Long, Long]),
       StageTimeSpan.getTimeSpan((json \ "stageMap").extract[Map[String, JValue]]),
-      getJobToStageMap((json \ "stageIDToJobID").extract[Map[Int, JValue]])
+      getJobToStageMap((json \ "stageIDToJobID").extract[Map[Int, JValue]]),
+      (json \ "physicalPlan").extract[String]
     )
 }
 
