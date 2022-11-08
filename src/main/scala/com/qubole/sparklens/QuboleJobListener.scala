@@ -275,9 +275,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
   override def onOtherEvent(event: SparkListenerEvent): Unit = {
     if (event.isInstanceOf[SparkListenerSQLExecutionStart]) {
       val sparkListenerSQLExecutionStart = event.asInstanceOf[SparkListenerSQLExecutionStart]
-      if(sparkListenerSQLExecutionStart.description contains "collect at SqlExecutor.scala:") {
-        physicalPlan += sparkListenerSQLExecutionStart.physicalPlanDescription
-      }
+      physicalPlan += sparkListenerSQLExecutionStart.physicalPlanDescription
     }
   }
 }
