@@ -84,7 +84,7 @@ object AppAnalyzer {
     list += new EfficiencyStatisticsAnalyzer
     list += new ExecutorWallclockAnalyzer
     list += new StageSkewAnalyzer
-
+    list += new PlanAnalyzer
 
     list.foreach( x => {
       try {

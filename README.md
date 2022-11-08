@@ -79,6 +79,7 @@ The following analyzers are currently available:
 7. SimpleAppAnalyzer
 8. StageOverlapAnalyzer
 9. StageSkewAnalyzer
+10. PlanAnalyzer
 
 We are hoping that Spark experts the world over will help us with ideas or contributions to extend this set. Similarly, 
 Spark users can help us in finding what is missing here by raising challenging tuning questions.   
