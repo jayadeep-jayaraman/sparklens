@@ -95,6 +95,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
     val taskMetrics = taskEnd.taskMetrics
     val taskInfo    = taskEnd.taskInfo
 
+
     if (taskMetrics == null) return
 
     //update app metrics
@@ -116,6 +117,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
       stageTimeSpan.get.updateAggregateTaskMetrics(taskMetrics, taskInfo)
       stageTimeSpan.get.updateTasks(taskInfo, taskMetrics)
     }
+
     val jobID = stageIDToJobID.get(taskEnd.stageId)
     if (jobID.isDefined) {
       val jobTimeSpan = jobMap.get(jobID.get)
@@ -258,7 +260,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
     if (stageCompleted.stageInfo.failureReason.isDefined) {
       //stage failed
       val si = stageCompleted.stageInfo
-      failedStages += s""" Stage ${si.stageId} attempt ${si.attemptId} in job ${stageIDToJobID(si.stageId)} failed.
+      failedStages += s""" Stage ${si.stageId} attempt ${si.attemptNumber} in job ${stageIDToJobID(si.stageId)} failed.
                       Stage tasks: ${si.numTasks}
                       """
       stageTimeSpan.finalUpdate()

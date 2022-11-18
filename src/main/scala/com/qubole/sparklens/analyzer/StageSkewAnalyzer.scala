@@ -17,8 +17,11 @@
 */
 package com.qubole.sparklens.analyzer
 
+import com.qubole.sparklens.common
+
 import java.util.Locale
 import com.qubole.sparklens.common.{AggregateMetrics, AppContext}
+
 import scala.collection.mutable
 
 /*
@@ -85,11 +88,43 @@ class StageSkewAnalyzer extends  AppAnalyzer {
     }
     ).sum
 
-    val totalIOBytes   = ac.jobMap.values.map ( x => (  x.jobMetrics.map(AggregateMetrics.inputBytesRead).value
-                                                      + x.jobMetrics.map(AggregateMetrics.outputBytesWritten).value
-                                                      + x.jobMetrics.map(AggregateMetrics.shuffleWriteBytesWritten).value
-                                                      + x.jobMetrics.map(AggregateMetrics.shuffleReadBytesRead).value)
-                                              ).sum
+
+    println ("Input Bytes Read:" + ac.jobMap.values.map(x=> print(x)))
+
+    val totalInputBytesRead: Iterable[Long] = ac.jobMap.values.map (x => (
+      if (x.jobMetrics.map.isDefinedAt(AggregateMetrics.inputBytesRead)) {
+        x.jobMetrics.map(AggregateMetrics.inputBytesRead).value
+      } else {
+        0L
+      }
+      )
+    )
+    val totalOutputBytesWritten = ac.jobMap.values.map (x => (
+      if (x.jobMetrics.map.isDefinedAt(AggregateMetrics.outputBytesWritten)) {
+        x.jobMetrics.map(AggregateMetrics.outputBytesWritten).value
+      } else {
+        0L
+      }
+      )
+    )
+    val totalshuffleWriteBytes = ac.jobMap.values.map (x => (
+      if (x.jobMetrics.map.isDefinedAt(AggregateMetrics.shuffleWriteBytesWritten)) {
+        x.jobMetrics.map(AggregateMetrics.shuffleWriteBytesWritten).value
+      } else {
+        0L
+      }
+      )
+    )
+    val totalShuffleReadBytes = ac.jobMap.values.map (x => (
+      if (x.jobMetrics.map.isDefinedAt(AggregateMetrics.shuffleReadBytesRead)) {
+        x.jobMetrics.map(AggregateMetrics.shuffleReadBytesRead).value
+      } else {
+        0L
+      }
+      )
+    )
+    val totalIOBytes= (totalInputBytesRead.sum + totalShuffleReadBytes.sum + totalshuffleWriteBytes.sum + totalOutputBytesWritten.sum)
+
 
     ac.stageMap.keySet
       .toBuffer
